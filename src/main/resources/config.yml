@@ -1,0 +1,19 @@
+# This plugin was made by vitor1227_OP
+# Make sure Vault is installed on your server, this plugin uses Vault as the basis for money management.
+
+# Variables that can be used:
+
+# {item_quantity} - Quantity of items sold.
+# {total_value} - Total value of items sold.
+
+items:
+  DIAMOND: 100.0
+  GOLD_INGOT: 50.0
+  IRON_INGOT: 20.0
+
+messages:
+  sell_all: "§b§o[SellAll] §aVocê vendeu §f§o{item_quantity} §aitens por §2§o${total_value}§a!"
+  sell_shift: "§b§o[ShiftSell] §aVocê vendeu §f§o{item_quantity} §aitens por §2$§o{total_value}§a!"
+  cooldown_message: "§b§o[ShiftSell] §cAguarde {time_left} segundos antes de vender novamente."
+sell:
+  interval: 5 # Time in seconds
