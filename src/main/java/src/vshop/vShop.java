@@ -103,10 +103,9 @@ public class vShop extends JavaPlugin implements TabExecutor, Listener {
 
         double totalValue = 0;
         int totalItemsSold = 0;
-        Material soldItem = null;
+
         for (ItemStack item : player.getInventory().getContents()) {
             if (item != null && item.getAmount() > 0 && itemPrices.containsKey(item.getType())) {
-                soldItem = item.getType();
                 double itemValue = itemPrices.get(item.getType()) * item.getAmount();
                 totalItemsSold += item.getAmount();
                 totalValue += itemValue;
@@ -115,12 +114,17 @@ public class vShop extends JavaPlugin implements TabExecutor, Listener {
         }
 
         if (totalValue > 0) {
-            econ.depositPlayer(player, totalValue);
             String message = getConfig().getString("messages.sell_shift");
             message = message.replace("{item_quantity}", String.valueOf(totalItemsSold))
-                    .replace("{item_name}", soldItem != null ? soldItem.name() : "")
-                    .replace("{total_value}", String.valueOf(totalValue));
+                    .replace("{total_value}", String.format("%.2f", totalValue));
             player.sendMessage(message);
+
+            double bonusMultiplier = getBonusMultiplier(player);
+            double totalValueWithBonus = totalValue * bonusMultiplier;
+            econ.depositPlayer(player, totalValueWithBonus);
+            String bonusMessage = getBonusMessage(player, totalValueWithBonus);
+            player.sendMessage(bonusMessage);
+
             setCooldown(player);
         } else {
             player.sendMessage("§c§o[vShop] §cVocê não tem itens pra venda.");
@@ -128,7 +132,7 @@ public class vShop extends JavaPlugin implements TabExecutor, Listener {
     }
 
     private void setCooldown(Player player) {
-        long cooldownTime = getConfig().getInt("sell.interval") * 1000;
+        int cooldownTime = getConfig().getInt("sell.interval") * 1000;
         shiftSellCooldown.put(player, System.currentTimeMillis() + cooldownTime);
     }
 
@@ -154,13 +158,50 @@ public class vShop extends JavaPlugin implements TabExecutor, Listener {
         }
 
         if (totalValue > 0) {
-            econ.depositPlayer(player, totalValue);
             String message = getConfig().getString("messages.sell_all");
-            message = message.replace("{item_quantity}", String.valueOf(totalItemsSold));
-            player.sendMessage(message.replace("{total_value}", String.valueOf(totalValue)));
+            message = message.replace("{item_quantity}", String.valueOf(totalItemsSold))
+                    .replace("{total_value}", String.format("%.2f", totalValue));
+            player.sendMessage(message);
+            double bonusMultiplier = getBonusMultiplier(player);
+            double totalValueWithBonus = totalValue * bonusMultiplier;
+            econ.depositPlayer(player, totalValueWithBonus);
+            String bonusMessage = getBonusMessage(player, totalValueWithBonus);
+            player.sendMessage(bonusMessage);
+
         } else {
             player.sendMessage("§c§o[vShop] §cVocê não tem itens para venda.");
         }
+    }
+
+    private double getBonusMultiplier(Player player) {
+        if (player.hasPermission("vshop.infinity")) {
+            return getConfig().getDouble("bonus.infinity.sell_bonus");
+        } else if (player.hasPermission("vshop.diamond")) {
+            return getConfig().getDouble("bonus.diamond.sell_bonus");
+        } else if (player.hasPermission("vshop.gold")) {
+            return getConfig().getDouble("bonus.gold.sell_bonus");
+        } else if (player.hasPermission("vshop.emerald")) {
+            return getConfig().getDouble("bonus.emerald.sell_bonus");
+        } else {
+            return getConfig().getDouble("bonus.default.sell_bonus");
+        }
+    }
+
+    private String getBonusMessage(Player player, double valueWithBonus) {
+        String message;
+
+        if (player.hasPermission("vshop.infinity")) {
+            message = getConfig().getString("bonus.infinity.sell_message");
+        } else if (player.hasPermission("vshop.diamond")) {
+            message = getConfig().getString("bonus.diamond.sell_message");
+        } else if (player.hasPermission("vshop.gold")) {
+            message = getConfig().getString("bonus.gold.sell_message");
+        } else if (player.hasPermission("vshop.emerald")) {
+            message = getConfig().getString("bonus.emerald.sell_message");
+        } else {
+            message = getConfig().getString("bonus.default.sell_message");
+        }
+        return message.replace("${value_with_bonus}", String.format("%.2f", valueWithBonus));
     }
 
     @EventHandler

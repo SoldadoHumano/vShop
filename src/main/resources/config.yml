@@ -17,3 +17,20 @@ messages:
   cooldown_message: "§b§o[ShiftSell] §cAguarde {time_left} segundos antes de vender novamente."
 sell:
   interval: 5 # Time in seconds
+
+bonus:
+  infinity:
+    sell_bonus: 1.30 # 30% bonus
+    sell_message: '§f[VIP Infinity] §a+ 30% bônus, totalizando §2§o${value_with_bonus}§a!'
+  diamond:
+    sell_bonus: 1.20 # 20% bonus
+    sell_message: '§9[VIP Diamante] §a+ 20% bônus, totalizando §2§o${value_with_bonus}§a!'
+  gold:
+    sell_bonus: 1.10 # 10% bonus
+    sell_message: '§6[VIP Ouro] §a+ 10% bônus, totalizando §2§o${value_with_bonus}§a!'
+  emerald:
+    sell_bonus: 1.05 # 5% bonus
+    sell_message: '§a[VIP Esmeralda] §a+ 5% bônus, totalizando §2§o${value_with_bonus}§a!'
+  default:
+    sell_bonus: 1.0 # 0% bonus
+    sell_message: '§7[Membro] + 0% bônus, você não possui VIP!'

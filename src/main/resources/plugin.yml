@@ -11,6 +11,21 @@ commands:
     permission: vshop.sell
     permission-message: "§c[vShop] Você não tem permissão para usar esse comando."
 permissions:
+  vshop.infinity:
+    description: Permite que o jogador ganhe o bônus do vip.
+    default: false
+  vshop.diamond:
+    description: Permite que o jogador ganhe o bônus do vip.
+    default: false
+  vshop.gold:
+    description: Permite que o jogador ganhe o bônus do vip.
+    default: false
+  vshop.emerald:
+    description: Permite que o jogador ganhe o bônus do vip.
+    default: true
+  vshop.default:
+    description: Permite que o jogador ganhe o bônus default.
+    default: false
   vshop.sell:
     description: Permite o jogador usar o comando /sell all.
     default: true
